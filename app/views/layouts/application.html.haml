@@ -58,7 +58,7 @@
                   %li.divider-vertical/
                   %li
                   %li
-                    %a{:href => "/bio.html"} Bio
+                    %a{:href => "/about"} About
                 .navsearch
                   = form_tag({:controller => 'search', :action => 'index'}, {:class => 'navbar-search pull-right'}) do
                     = text_field_tag :query, params[:query], :class => 'search-query', :id => 'search_field', :placeholder => 'Search',  :autocomplete => false

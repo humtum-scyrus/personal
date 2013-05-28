@@ -2,6 +2,7 @@ Personal::Application.routes.draw do
   get "static_pages/becoming_wikipedian"
 
   get "home/index"
+  get "home/about"
 
   get "search/index"
   post "search/index"
@@ -21,6 +22,7 @@ Personal::Application.routes.draw do
   end
 
   root :to => "home#index"
+  match "about" => "home#about"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

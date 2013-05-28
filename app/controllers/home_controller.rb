@@ -3,4 +3,7 @@ class HomeController < ApplicationController
     @updates = Update.all
     @papers = Paper.all
   end
+
+  def about
+  end
 end
