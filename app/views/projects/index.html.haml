@@ -1,15 +1,42 @@
-- @projects.each do |project|
+.actions
+  = link_to 'List All Projects', '/projects/list'
+- if @featured
+  %h1.bottom-marg Featured Projects
+  #myCarousel.carousel
+    / Carousel items
+    .carousel-inner
+      - @featured.each do |feat|
+        %div{:class => "item carousel-item#{' active' if feat == @featured.first}"}
+          %img{:src => feat.featured.url(:full)}/
+          .carousel-caption.bottom-marg
+            %h4= feat.title
+            %p= link_to "Learn more", project_path(feat), :class => "btn btn-primary btn-large pull-right bottom-marg"
+    / Carousel nav
+    %a.carousel-control.left{"data-slide" => "prev", :href => "#myCarousel"} &lsaquo;
+    %a.carousel-control.right{"data-slide" => "next", :href => "#myCarousel"} &rsaquo;
+- if @subfeatured
+  %h1.bottom-marg Other Recent Projects
   .row
-    .span2.well.projitem.header
-      = image_tag(project.preview.url(:projthumb))
-    .span9.well.projitem
-      %h3.bottom-marg= project.title
-      %p= project.description
-      %p.tags
-        %strong Tags:
-        - project.tags.each do |tag|
-          = link_to tag, {:controller => :search, :action => :index, :tags => tag}, html_options = {:class => "label" }
-      %p
-        %a.btn.pull-right{:href => project_path(project)} View more &raquo;
-- if session[:authenticated]
-  = link_to 'New', new_project_path, :class => 'btn btn-primary pull-right'
+    - @subfeatured.each do |subfeat|
+      .span4_bordered.bordered
+        %div
+          %h3.heading
+            = link_to subfeat.title, project_path(subfeat)
+        .thumbmg.center
+          = image_tag (subfeat.preview.exists? ? subfeat.preview.url(:projthumb) : 'http://placehold.it/180x180')
+        %hr/
+        %p= subfeat.description[0..150] + ( subfeat.description.length > 150 ? '...' : '' )
+        %hr/
+        %p.tags
+          %strong Tags:
+          - subfeat.tags.each do |tag|
+            = link_to tag, {:controller => :search, :action => :index, :tags => tag}, html_options = {:class => "label" }
+- if @mediagrid
+  %h2 Other Work
+  %ul.thumbnails
+    - @mediagrid.first(3).each do |mgobj|
+      %li.span4= link_to image_tag((mgobj.preview.exists? ? mgobj.preview.url(:mglarge) : 'http://placehold.it/320x240')), project_path(mgobj)
+    - if @mediagrid.length > 3
+      - @mediagrid.last(@mediagrid.length - 3).each do |mgobj|
+        %li.span3= link_to image_tag((mgobj.preview.exists? ? mgobj.preview.url(:mgsmall) : 'http://placehold.it/260x180')), project_path(mgobj)
+

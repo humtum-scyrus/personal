@@ -2,10 +2,11 @@ Personal::Application.routes.draw do
   get "static_pages/becoming_wikipedian"
 
   get "home/index"
-  get "home/temp"
 
   get "search/index"
   post "search/index"
+
+  resources :updates
 
   resources :papers
 
@@ -13,7 +14,11 @@ Personal::Application.routes.draw do
 
   resources :essays
 
-  resources :projects
+  resources :projects do
+    collection do
+      get 'list'
+    end
+  end
 
   root :to => "home#index"
 

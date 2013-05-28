@@ -1,39 +1,92 @@
-- if @featured
-  %h1.bottom-marg Featured Projects
-  #myCarousel.carousel
-    / Carousel items
-    .carousel-inner
-      - @featured.each do |feat|
-        %div{:class => "item carousel-item#{' active' if feat == @featured.first}"}
-          %img{:src => feat.featured.url(:full)}/
-          .carousel-caption.bottom-marg
-            %h4= feat.title
-            %p= link_to "Learn more", project_path(feat), :class => "btn btn-primary btn-large pull-right bottom-marg"
-    / Carousel nav
-    %a.carousel-control.left{"data-slide" => "prev", :href => "#myCarousel"} &lsaquo;
-    %a.carousel-control.right{"data-slide" => "next", :href => "#myCarousel"} &rsaquo;
-- if @subfeatured
-  %h1.bottom-marg Other Recent Projects
-  .row
-    - @subfeatured.each do |subfeat|
-      .span4_bordered.bordered
-        %div
-          %h3.heading
-            = link_to subfeat.title, project_path(subfeat)
-        .thumbmg.center
-          = image_tag (subfeat.preview.exists? ? subfeat.preview.url(:projthumb) : 'http://placehold.it/180x180')
-        %hr/
-        %p= subfeat.description[0..150] + ( subfeat.description.length > 150 ? '...' : '' )
-        %hr/
-        %p.tags
-          %strong Tags:
-          - subfeat.tags.each do |tag|
-            = link_to tag, {:controller => :search, :action => :index, :tags => tag}, html_options = {:class => "label" }
-- if @mediagrid
-  %h2 Other Work
-  %ul.thumbnails
-    - @mediagrid.first(3).each do |mgobj|
-      %li.span4= link_to image_tag((mgobj.preview.exists? ? mgobj.preview.url(:mglarge) : 'http://placehold.it/320x240')), project_path(mgobj)
-    - if @mediagrid.length > 3
-      - @mediagrid.last(@mediagrid.length - 3).each do |mgobj|
-        %li.span3= link_to image_tag((mgobj.preview.exists? ? mgobj.preview.url(:mgsmall) : 'http://placehold.it/260x180')), project_path(mgobj)
+.row
+  .span4.biocontainer
+    .bioimg
+      = image_tag 'me-korea.jpg'
+  .span4.bioabout
+    %h3 Quick Bio
+    %p
+      I am a second year Ph.D. student at the <a href="http://hcii.cmu.edu">Human-Computer Interaction Institute</a> of <a href="www.cmu.edu">Carnegie Mellon University</a>. I am advised by <a href="http://www.cs.cmu.edu/~jasonh">Jason Hong</a>. My research is centered around apply machine learning and data science to usable privacy and security. Recently, I have been working on autobiographical authentication, self-censorship on social media, and social cybersecurity. I am currently interning at Facbeook. Before, I interned at Facebook and Microsoft Research. 
+    %p
+      Perhaps you're looking for my <a href='/cv.pdf'>Curriculum Vitae</a>.
+  .span4.bioupdates
+    %h3 Quick Updates
+    = render @updates 
+.row
+  .span12.biopubs
+    - conference_papers = @papers.select { |paper| paper.papertype == "1" }
+    - journal_papers = @papers.select { |paper| paper.papertype == "2" }
+    - workshop_papers = @papers.select { |paper| paper.papertype == "3" }
+    - if journal_papers.length > 0
+      %h3 Journal Papers
+      %table.table
+        %tbody
+          - journal_papers.each do |paper|
+            %tr
+              %td{:width => "95%"}
+                - if paper.citation and not paper.citation == ""
+                  = paper.citation
+                - else
+                  = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
+                  ,
+                  - paper.collaborators.each.each_with_index do |collab,i|
+                    = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
+                    = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
+                  = succeed "." do
+                    %span.title= paper.title
+                  %span.venue= paper.venue
+                  = succeed "." do
+                    %span.year= paper.year
+                  = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
+                  = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
+                  = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums and paper.page_nums != ""
+                  = "[<span class=\"acc-rate\">#{paper.accept_rate}</span>% accept rate]".html_safe if paper.accept_rate and paper.accept_rate != ""
+              %td= link_to 'PDF', paper.pdf.url
+    - if conference_papers.length > 0
+      %h3 Conference Papers
+      %table.table
+        %tbody
+          - conference_papers.each do |paper|
+            %tr
+              %td{:width => "95%"}
+                - if paper.citation and not paper.citation == ""
+                  = paper.citation
+                - else
+                  = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
+                  - paper.collaborators.each.each_with_index do |collab,i|
+                    = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
+                    = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
+                  = succeed "." do
+                    %span.title= paper.title
+                  %span.venue= paper.venue
+                  = succeed "." do
+                    %span.year= paper.year
+                  = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
+                  = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
+                  = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums and paper.page_nums != ""
+                  = "[<span class=\"acc-rate\">#{paper.accept_rate}</span>% accept rate]".html_safe if paper.accept_rate and paper.accept_rate != ""
+              %td= link_to 'PDF', paper.pdf.url
+    - if workshop_papers.length > 0
+      %h3 Workshop Papers
+      %table.table
+        %tbody
+          - workshop_papers.each do |paper|
+            %tr
+              %td{:width => "95%"}
+                - if paper.citation and not paper.citation == ""
+                  = paper.citation
+                - else
+                  = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
+                  - paper.collaborators.each.each_with_index do |collab,i|
+                    = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
+                    = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
+                  %span.title= paper.title
+                  %span.venue= paper.venue
+                  = succeed "." do
+                    %span.year= paper.year
+                  = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
+                  = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
+                  = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums
+                  [
+                  %span.acc-rate>= paper.accept_rate
+                  \% accept rate]
+              %td= link_to 'PDF', paper.pdf.url

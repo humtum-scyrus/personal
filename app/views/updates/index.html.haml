@@ -1,0 +1,14 @@
+%table.table.table-striped
+  %tbody
+    - @updates.each do |update|
+      %tr
+        %td{width: "10%"}
+          = update.pretty_date
+        %td{width: "75%"}
+          = update.body
+        %td{width: "15%"}
+          .btn-group
+            = link_to "Edit", edit_update_path(update), class: 'btn'
+            = link_to 'Delete', update_path(update), method: :delete, class: 'btn btn-danger', confirm: 'Are you sure?'
+
+= link_to 'New Update', new_update_path, class: 'btn btn-primary'
