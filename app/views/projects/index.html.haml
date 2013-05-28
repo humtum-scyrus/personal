@@ -1,0 +1,15 @@
+- @projects.each do |project|
+  .row
+    .span2.well.projitem.header
+      = image_tag(project.preview.url(:projthumb))
+    .span9.well.projitem
+      %h3.bottom-marg= project.title
+      %p= project.description
+      %p.tags
+        %strong Tags:
+        - project.tags.each do |tag|
+          = link_to tag, {:controller => :search, :action => :index, :tags => tag}, html_options = {:class => "label" }
+      %p
+        %a.btn.pull-right{:href => project_path(project)} View more &raquo;
+- if session[:authenticated]
+  = link_to 'New', new_project_path, :class => 'btn btn-primary pull-right'

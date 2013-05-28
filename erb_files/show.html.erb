@@ -1,0 +1,31 @@
+<h1 class="header bottom-marg"><%= @project.title %></h1>
+
+<div class="featured_img field bottom-marg">
+  <% if @project.featured.exists? %>
+    <%= link_to image_tag(@project.featured.url(:full)), @project.featured.url, :class=>'feat_img' %>
+  <% end %>
+</div>
+
+<p>
+  <b>Collaborators:</b>
+  <%= @project.collaborators.map { |collab| link_to collab.full_name, collaborator_path(collab), :class => 'collab' }.join(',').html_safe %>
+</p>
+
+<p class="bottom-marg">
+  <b>Tags:</b>
+  <%= @project.tags.map { |tag| link_to tag, {:controller => :search, :action => :index, :tags => tag}, html_options = {:class => "label" }}.join(' ').html_safe %>
+</p>
+
+<hr/>
+
+<div class="row">
+  <div class="well" style="width:940px;"><%= @project.markup.html_safe %></div>
+</div>
+
+<% if session[:authenticated] %>
+  <div class="form-actions">
+    <%= link_to 'Back', projects_path, :class => 'btn'  %>
+    <%= link_to 'Edit', edit_project_path(@project), :class => 'btn' %>
+    <%= link_to 'Delete', project_path(@project), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+  </div>
+<% end %>

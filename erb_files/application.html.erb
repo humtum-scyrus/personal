@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<% if @static_page %>
+  <%= yield %>
+<% else %>
+  <html>
+  <head>
+    <title>Personal</title>
+    <%= stylesheet_link_tag    "application", "token-input-facebook"  %>
+    <%= javascript_include_tag "application", "jquery.tokeninput"  %>
+    <%= javascript_include_tag "/javascripts/ckeditor/ckeditor.js" %>
+    <% if @plus_css %>
+      <% @plus_css.each do |css| %>
+        <%= stylesheet_link_tag css %>
+      <% end %>
+    <% end %>
+    <% if @plus_js %>
+      <% @plus_js.each do |js| %>
+        <%= javascript_include_tag js %>
+      <% end %>
+    <% end %>
+    <%= csrf_meta_tags %>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-30333530-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body class="<%= find_named_routes.join(" ") %>">
+    <div class="container">
+      <div class="row bottom-marg">
+        <div class="span2">
+          <a href="#"><img src="/assets/name-header.png"/></a>
+        </div>
+        <div class="span8 header">
+          <img src="/assets/middle-header.png"/>
+        </div>
+        <div class="span2">
+          <img src="/assets/right-header.png"/>
+        </div>
+      </div>
+
+    
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <div class="nav-collapse">
+              <ul class="nav">
+                <li class="<%= (controller_name.downcase == 'home' ? 'active' : 'inactive') %>"><%= link_to 'Home', root_path %></li>
+                <li class="divider-vertical"></li>
+                <li class="<%= (controller_name.downcase == 'projects' ? 'active' : 'inactive') %>"><%= link_to 'Projects', projects_path %></li>
+                <li class="divider-vertical"></li>
+                <li class="<%= (controller_name.downcase == 'essays' ? 'active' : 'inactive') %>"><%= link_to 'Essays', essays_path %></li>
+                <li class="divider-vertical"></li>
+                <li class="<%= (controller_name.downcase == 'papers' ? 'active' : 'inactive') %>"><%= link_to 'Papers', papers_path %></li>
+                <li class="divider-vertical"></li>
+                <li class="<%= (controller_name.downcase == 'collaborators' ? 'active' : 'inactive') %>"><%= link_to 'Collaborators', collaborators_path %></li>
+                <li class="divider-vertical"><li>
+                <li><a href="/bio.html">Bio</a></li>
+              </ul>
+              <div class="navsearch">
+
+                <%= form_tag({:controller => 'search', :action => 'index'}, {:class => 'navbar-search pull-right'}) do %>
+                  <%= text_field_tag :query, params[:query], :class => 'search-query', :id => 'search_field', :placeholder => 'Search',  :autocomplete => false  %>
+                <% end %> 
+            </div>
+            </div><!--/.nav-collapse -->
+          </div>
+        </div>
+      </div>
+      <%= yield %>
+
+
+      <hr/>
+      <div class="row">
+        <div class="span8 ft">
+          <p>&copy; Sauvik Das 2009-2012</p>
+        </div>
+        <div class="span4 ft" id="social-media">
+          <a href="http://facebook.com/sauvikdas"><img src="/assets/facebook-icon.png" height="50px" width="50px"/></a>
+          <a href="http://twitter.com/#!/Scyrus89"><img src="/assets/twitter-icon.png" height="50px" width="50px"/></a>
+          <a href="https://plus.google.com/116253484763753655451"><img src="/assets/g+icon.png" height="50px" width="50px"/></a>
+          <a href="http://www.linkedin.com/pub/sauvik-das/1b/66a/71b"><img src="/assets/linkedin-icon.png" height="50px" width="50px"/></a>
+          <a href="https://github.com/scyrusk"><img src="/assets/github.png" height="50px" width="50px"/></a>
+        </div>
+      </div>
+    </div>
+  </body>
+  </html>
+<% end %>

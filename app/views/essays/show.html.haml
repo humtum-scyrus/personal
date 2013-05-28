@@ -1,0 +1,18 @@
+%h1.header= @essay.title
+%p.header
+  = link_to 'Sauvik Das', root_path
+  - @essay.collaborators.each do |collab|
+    ,   #{link_to collab.full_name, collaborator_path(collab)}
+%p.header.description
+  = @essay.description
+%hr/
+.row
+  .well{:style => "width:940px;"}= @essay.markup.html_safe
+%p
+  %b Tags:
+  = @essay.tags.map { |tag| link_to tag, {:controller => :search, :action => :index, :tags => tag}, html_options = {:class => "label" }}.join(',').html_safe
+- if session[:authenticated]
+  .form-actions
+    = link_to 'Back', essays_path, :class => 'btn'
+    = link_to 'Edit', edit_essay_path(@essay), :class => 'btn'
+    = link_to 'Delete', essay_path(@essay), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger'

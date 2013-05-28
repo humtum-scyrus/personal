@@ -1,0 +1,24 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  description: MyString
+  tags: MyText
+  markup: MyText
+
+two:
+  description: MyString
+  tags: MyText
+  markup: MyText
+# == Schema Information
+#
+# Table name: essays
+#
+#  id          :integer         not null, primary key
+#  description :string(255)
+#  tags        :text
+#  markup      :text
+#  created_at  :datetime
+#  updated_at  :datetime
+#  title       :string(255)
+#
+

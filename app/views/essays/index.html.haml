@@ -1,0 +1,17 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th Title
+      %th Description
+      %th Created
+      %th Updated
+  %tbody
+    - @essays.each do |essay|
+      %tr
+        %td= link_to essay.title, essay_path(essay)
+        %td= essay.description
+        %td= essay.created_at.strftime("%m/%d/%Y")
+        %td= essay.updated_at.strftime("%m/%d/%Y")
+        %td
+- if session[:authenticated]
+  = link_to 'New', new_essay_path, :class => 'btn btn-primary pull-right'

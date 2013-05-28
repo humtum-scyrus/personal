@@ -1,0 +1,98 @@
+%h2.header
+  Search results for: #{@title}
+- if @projects.length + @essays.length + (@collaborators ? @collaborators.length : 0 ) + (@papers ? @papers.length : 0) == 0
+  %p Whoops, looks like I couldn't find anything matching your search terms!
+- else
+  - active = true
+  %ul.nav.nav-tabs
+    = "<li #{(@active == 'projects' ? 'class="active"' : '')}><a href=\"#projects\" data-toggle=\"tab\">Projects</a></li>".html_safe if @projects and @projects.length > 0
+    = "<li #{(@active == 'essays' ? 'class="active"' : '')}><a href=\"#essays\" data-toggle=\"tab\">Essays</a></li>".html_safe if @essays and @essays.length > 0
+    = "<li  #{(@active == 'collaborators' ? 'class="active"' : '')}><a href=\"#collabs\" data-toggle=\"tab\">Collaborators</a></li>".html_safe if @collaborators and @collaborators.length > 0
+    = "<li  #{(@active == 'papers' ? 'class="active"' : '')}><a href=\"#papers\" data-toggle=\"tab\">Papers</a></li>".html_safe if @papers and @papers.length > 0
+  - active = true
+  .tab-content
+    - if @projects and @projects.length > 0
+      - active = false
+      #projects.tab-pane.active
+        %h3 Projects
+        - @projects.each do |project|
+          .row
+            .span2.well.projitem.header
+              = image_tag(project.preview.url(:projthumb))
+            .span9.well.projitem
+              %h3.bottom-marg= project.title
+              %p= project.description
+              %p.tags
+                %strong Tags:
+                - project.tags.each do |tag|
+                  = link_to tag, {:controller => :search, :action => :index, :tags => tag}, html_options = {:class => "label" }
+              %p
+                %a.btn.pull-right{:href => project_path(project)} View more &raquo;
+    - if @essays and @essays.length > 0
+      #essays{:class => "tab-pane #{active ? 'active' : ''}"}
+        - active = false
+        %h3 Essays
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Title
+              %th Description
+              %th Created
+              %th Updated
+          %tbody
+            - @essays.each do |essay|
+              %tr
+                %td= link_to essay.title, essay_path(essay)
+                %td= essay.description
+                %td= essay.created_at.strftime("%m/%d/%Y")
+                %td= essay.updated_at.strftime("%m/%d/%Y")
+                %td
+    - if @collaborators and @collaborators.length > 0
+      #collabs{:class => "tab-pane #{active ? 'active' : ''}"}
+        - active = false
+        %h3 Collaborators
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Name
+              %th Projects collaboratored on
+              %th Essays coauthored
+              %th Papers coauthored
+          %tbody
+            - @collaborators.sort { |a,b| b.projects.length <=> a.projects.length }.each do |collaborator|
+              %tr
+                %td= link_to collaborator.full_name, collaborator_path(collaborator)
+                %td= collaborator.projects.length
+                %td= collaborator.essays.length
+                %td= collaborator.papers.length
+    - if @papers and @papers.length > 0
+      #papers{:class => "tab-pane #{active ? 'active' : ''}"}
+        - active = false
+        %h3 Papers
+        %table.table.table-striped
+          %tbody
+            - @papers.each do |paper|
+              %tr
+                %td{:width => "95%"}
+                  - if paper.citation and not paper.citation == ""
+                    = paper.citation
+                  - else
+                    = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
+                    - paper.collaborators.each.each_with_index do |collab,i|
+                      = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
+                      = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
+                    %span.title= paper.title
+                    %span.venue= paper.venue
+                    = succeed "." do
+                      %span.year= paper.year
+                    = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
+                    = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
+                    = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums
+                    [
+                    %span.acc-rate>= paper.accept_rate
+                    \% accept rate]
+                %td= link_to 'PDF', paper.pdf.url
+:javascript
+  $(function () {
+      $('.tabs a:last').tab('show')
+    })

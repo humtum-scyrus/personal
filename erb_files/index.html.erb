@@ -1,0 +1,143 @@
+<h2 class="header">Search results for: <%= @title %></h2>
+
+
+<% if @projects.length + @essays.length + (@collaborators ? @collaborators.length : 0 ) + (@papers ? @papers.length : 0) == 0 %>
+  <p>Whoops, looks like I couldn't find anything matching your search terms!</p>
+<% else %>
+  <% active = true %>
+  <ul class="nav nav-tabs">
+    <%= "<li #{(@active == 'projects' ? 'class="active"' : '')}><a href=\"#projects\" data-toggle=\"tab\">Projects</a></li>".html_safe if @projects and @projects.length > 0 %>
+    <%= "<li #{(@active == 'essays' ? 'class="active"' : '')}><a href=\"#essays\" data-toggle=\"tab\">Essays</a></li>".html_safe if @essays and @essays.length > 0 %>
+    <%= "<li  #{(@active == 'collaborators' ? 'class="active"' : '')}><a href=\"#collabs\" data-toggle=\"tab\">Collaborators</a></li>".html_safe if @collaborators and @collaborators.length > 0 %>
+    <%= "<li  #{(@active == 'papers' ? 'class="active"' : '')}><a href=\"#papers\" data-toggle=\"tab\">Papers</a></li>".html_safe if @papers and @papers.length > 0 %>
+  </ul>
+
+  <% active = true %>
+
+  <div class="tab-content">
+    <% if @projects and @projects.length > 0 %>
+      <% active = false %>
+      <div class="tab-pane active" id="projects">
+        <h3>Projects</h3>
+        <% @projects.each do |project| %>
+          <div class="row">
+            <div class="span2 well projitem header">
+              <%= image_tag(project.preview.url(:projthumb)) %>
+            </div>
+            <div class="span9 well projitem">
+              <h3 class="bottom-marg"><%= project.title %></h3>
+              <p><%= project.description %></p>
+            <p class="tags">
+              <strong>Tags:</strong> 
+              <% project.tags.each do |tag| %>
+                <%= link_to tag, {:controller => :search, :action => :index, :tags => tag}, html_options = {:class => "label" } %>
+              <% end %>
+            </p>
+            <p><a class="btn pull-right" href="<%= project_path(project) %>">View more &raquo;</a></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+
+    <% if @essays and @essays.length > 0 %>
+      <div class="tab-pane <%= active ? 'active' : '' %>" id="essays">
+        <% active = false %>
+        <h3>Essays</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Created</th>
+              <th>Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @essays.each do |essay| %>
+              <tr>
+                <td><%= link_to essay.title, essay_path(essay) %></td>
+                <td><%= essay.description %></td>
+                <td><%= essay.created_at.strftime("%m/%d/%Y") %></td>
+                <td><%= essay.updated_at.strftime("%m/%d/%Y") %></td>
+                <td></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+
+
+    <% if @collaborators and @collaborators.length > 0 %>
+      <div class="tab-pane <%= active ? 'active' : '' %>" id="collabs">
+        <% active = false %>
+        <h3>Collaborators</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Projects collaboratored on</th>
+              <th>Essays coauthored</th>
+              <th>Papers coauthored</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @collaborators.sort { |a,b| b.projects.length <=> a.projects.length }.each do |collaborator| %>
+              <tr>
+                <td><%= link_to collaborator.full_name, collaborator_path(collaborator) %></td>
+                <td><%= collaborator.projects.length %></td>
+                <td><%= collaborator.essays.length %></td>
+                <td><%= collaborator.papers.length %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+
+
+    <% if @papers and @papers.length > 0 %>
+      <div class="tab-pane <%= active ? 'active' : '' %>" id="papers">
+        <% active = false %>
+        <h3>Papers</h3>
+        <table class="table table-striped">
+          <tbody>
+            <% @papers.each do |paper| %>
+              <tr>
+                <td width="95%">
+                  <% if paper.citation and not paper.citation == "" %>
+                    <%= paper.citation %>
+                  <% else %>
+                    <%= link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0 %>
+                    <% paper.collaborators.each.each_with_index do |collab,i| %>
+                      <%= link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order %>
+                      <%= link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author' %>
+                    <% end %>
+                    <span class="title"><%= paper.title %></span>
+                    <span class="venue"><%= paper.venue %></span>
+                    <span class="year"><%= paper.year %></span>.
+                    <%= "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume %>
+                    <%= "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue %>
+                    <%= "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums %>
+                    [<span class="acc-rate"><%= paper.accept_rate %></span>% accept rate]
+                  <% end %>
+                </td>
+                <td><%= link_to 'PDF', paper.pdf.url %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
+
+<% end %>
+
+<script type="text/javascript">
+  $(function () {
+      $('.tabs a:last').tab('show')
+    })
+</script>
+

@@ -1,0 +1,42 @@
+%h1 /Paper
+%p
+  %b Citation
+  %br/
+  = @paper.citation if paper.citation
+%p
+  %b Pdf file name
+  %br/
+  = @paper.pdf_file_name
+%p
+  %b Pdf content type
+  %br/
+  = @paper.pdf_content_type
+%p
+  %b Pdf file size
+  %br/
+  = @paper.pdf_file_size
+%p
+  %b Pdf updated at
+  %br/
+  = @paper.pdf_updated_at
+%p
+  %b Year
+  %br/
+  = @paper.year
+%p
+  %b Venue
+  %br/
+  = @paper.venue
+%p
+  %b Accept rate
+  %br/
+  = @paper.accept_rate
+%p
+  %b Title
+  %br/
+  = @paper.title
+- if session[:authenticated]
+  .form-actions
+    = link_to 'Back', papers_path, :class => 'btn'
+    = link_to 'Edit', edit_paper_path(@paper), :class => 'btn'
+    = link_to 'Delete', paper_path(@paper), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger'

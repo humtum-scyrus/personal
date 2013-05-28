@@ -1,0 +1,64 @@
+= form_for @paper, :html => { :class => 'form-horizontal' } do |f|
+  %fieldset
+    %legend
+      = controller.action_name.capitalize
+      \/Paper
+    .control-group
+      = f.label :title, :class => 'control-label'
+      .controls
+        = f.text_field :title, :class => 'text_field'
+    .control-group
+      = f.label :tokenCollabList, 'Collaborators', :class => 'control-label'
+      .controls{:style => "float:left;margin-left:20px;"}
+        = f.text_field :tokenCollabList, :placeholder => 'Separate collaborators with commas', "data-pre" => @paper.collaborators.to_json
+    .control-group
+      = f.label :year, :class => 'control-label'
+      .controls
+        = f.number_field :year, :class => 'number_field'
+    .control-group
+      = f.label :venue, :class => 'control-label'
+      .controls
+        = f.text_field :venue, :class => 'text_field'
+    .control-group
+      = f.label :accept_rate, :class => 'control-label'
+      .controls
+        = f.text_field :accept_rate, :class => 'text_field'
+    .control-group
+      = f.label :self_author_order, :class => 'control-label'
+      .controls
+        = f.text_field :self_author_order, :class => 'text_field'
+    .control-group
+      = f.label :volume, :class => 'control-label'
+      .controls
+        = f.number_field :volume, :class => 'number_field'
+    .control-group
+      = f.label :issue, :class => 'control-label'
+      .controls
+        = f.number_field :issue, :class => 'number_field'
+    .control-group
+      = f.label :page_nums, :class => 'control-label'
+      .controls
+        = f.text_field :page_nums, :class => 'text_field'
+    .control-group
+      = f.label :papertype, :class => 'control-label'
+      .controls
+        = f.select :papertype,  { :Conference => "1", :Journal => "2", :Workshop => "3"}, html_options = {:class => 'text_field'}
+    .control-group
+      = f.label :citation, :class => 'control-label'
+      .controls
+        = f.text_field :citation, :class => 'text_field'
+    .control-group
+      = f.label :pdf, :class => 'control-label'
+      .controls
+        = f.file_field :pdf, :class => 'file_field'
+    .form-actions
+      = f.submit nil, :class => 'btn btn-primary'
+      = link_to 'Cancel', papers_path, :class => 'btn'
+:javascript
+  $(function() {
+    $("#paper_tokenCollabList").tokenInput("/collaborators.json", {
+      crossDomain: false,
+      prePopulate: $("#paper_tokenCollabList").data("pre"),
+      theme: "facebook"
+    });
+  });

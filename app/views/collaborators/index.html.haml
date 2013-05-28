@@ -1,0 +1,16 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Projects collaboratored on
+      %th Essays coauthored
+      %th Papers coauthored
+  %tbody
+    - @collaborators.sort { |a,b| b.projects.length <=> a.projects.length }.each do |collaborator|
+      %tr
+        %td= link_to collaborator.full_name, collaborator_path(collaborator)
+        %td= collaborator.projects.length
+        %td= collaborator.essays.length
+        %td= collaborator.papers.length
+- if session[:authenticated]
+  = link_to 'New', new_collaborator_path, :class => 'btn btn-primary pull-right'

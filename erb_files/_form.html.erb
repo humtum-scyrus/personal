@@ -1,0 +1,79 @@
+<%= form_for @project, :html => { :class => 'form-horizontal' } do |f| %>
+  <fieldset>
+    <legend><%= controller.action_name.capitalize %> /Project</legend>
+
+
+    <div class="control-group">
+      <%= f.label :title, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :title, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :tokenCollabList, 'Collaborators', :class => 'control-label' %>
+      <div class="controls" style="float:left;margin-left:20px;">
+        <%= f.text_field :tokenCollabList, :placeholder => 'Separate collaborators with commas', "data-pre" => @project.collaborators.to_json %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :description, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_area :description, :class => 'text_field', :size => '20x10' %>
+      </div>
+    </div>
+
+
+    <div class="control-group">
+      <%= f.label :markup, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.cktext_area :markup, :toolbar=>'Full', :width=>'750px', :height=>'600px' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :taglist, 'Tags:', :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :taglist, :placeholder => 'Separate tags with commas' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :featured, 'Featured Photo:', :class => 'control-label' %>
+      <div class="controls">
+        <%= f.file_field :featured, :class => 'file_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :preview, 'Preview Photo:', :class => 'control-label' %>
+      <div class="controls">
+        <%= f.file_field :preview, :class => 'file_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :is_featured, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :is_featured, :class => 'check_box' %>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', projects_path, :class => 'btn' %>
+    </div>
+  </fieldset>
+<% end %>
+
+
+<script type="text/javascript">
+$(function() {
+  $("#project_tokenCollabList").tokenInput("/collaborators.json", {
+    crossDomain: false,
+    prePopulate: $("#project_tokenCollabList").data("pre"),
+    theme: "facebook"
+  });
+});
+</script>
