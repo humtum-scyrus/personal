@@ -5,76 +5,14 @@
   %h2 Journal Papers
   %table.table.table-striped
     %tbody
-      - journal_papers.each do |paper|
-        %tr
-          %td{:width => "95%"}
-            - if paper.citation and not paper.citation == ""
-              = paper.citation
-            - else
-              = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
-              ,
-              - paper.collaborators.each.each_with_index do |collab,i|
-                = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
-                = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
-              = succeed "." do
-                %span.title= paper.title
-              %span.venue= paper.venue
-              = succeed "." do
-                %span.year= paper.year
-              = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
-              = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
-              = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums and paper.page_nums != ""
-              = "[<span class=\"acc-rate\">#{paper.accept_rate}</span>% accept rate".html_safe if paper.accept_rate and paper.accept_rate != ""
-          %td= link_to 'PDF', paper.pdf.url
+      = render partial: 'paper_table', collection: journal_papers, as: :paper
 - if conference_papers.length > 0
   %h2 Conference Papers
   %table.table.table-striped
     %tbody
-      - conference_papers.each do |paper|
-        %tr
-          %td{:width => "95%"}
-            - if paper.citation and not paper.citation == ""
-              = paper.citation
-            - else
-              = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
-              - paper.collaborators.each.each_with_index do |collab,i|
-                = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
-                = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
-              = succeed "." do
-                %span.title= paper.title
-              %span.venue= paper.venue
-              = succeed "." do
-                %span.year= paper.year
-              = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
-              = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
-              = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums and paper.page_nums != ""
-              = "[<span class=\"acc-rate\">#{paper.accept_rate}</span>% accept rate]".html_safe if paper.accept_rate and paper.accept_rate != ""
-          %td= link_to 'PDF', paper.pdf.url
+      = render partial: 'paper_table', collection: conference_papers, as: :paper
 - if workshop_papers.length > 0
   %h2 Workshop Papers
   %table.table.table-striped
     %tbody
-      - workshop_papers.each do |paper|
-        %tr
-          %td{:width => "95%"}
-            - if paper.citation and not paper.citation == ""
-              = paper.citation
-            - else
-              = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
-              - paper.collaborators.each.each_with_index do |collab,i|
-                = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
-                = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
-              %span.title= paper.title
-              %span.venue= paper.venue
-              = succeed "." do
-                %span.year= paper.year
-              = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
-              = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
-              = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums
-              [
-              %span.acc-rate>= paper.accept_rate
-              \% accept rate]
-          %td= link_to 'PDF', paper.pdf.url
-%p.note Note: For papers that have been submitted and are awaiting approval, I do not provide the pdf attachment.
-- if session[:authenticated]
-  = link_to 'New', new_paper_path, :class => 'btn btn-primary pull-right'
+      = render partial: 'paper_table', collection: workshop_papers, as: :paper

@@ -6,7 +6,7 @@
       %th Essays coauthored
       %th Papers coauthored
   %tbody
-    - @collaborators.sort { |a,b| b.projects.length <=> a.projects.length }.each do |collaborator|
+    - @collaborators.sort { |a,b| b.papers.length <=> a.papers.length }.each do |collaborator|
       %tr
         %td= link_to collaborator.full_name, collaborator_path(collaborator)
         %td= collaborator.projects.length

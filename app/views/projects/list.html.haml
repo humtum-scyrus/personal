@@ -1,5 +1,5 @@
 - @projects.each do |project|
-  .row
+  .row.clickable_proj{id: project.id}
     .span2.well.projitem.header
       = image_tag(project.preview.url(:projthumb))
     .span9.well.projitem

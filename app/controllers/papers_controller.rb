@@ -1,10 +1,10 @@
 class PapersController < ApplicationController
-  before_filter :authenticate, :except => [:index,:show]
+  before_filter :authenticate, :except => [:index,:show,:serve]
 
   # GET /papers
   # GET /papers.json
   def index
-    @papers = Paper.all
+    @papers = Paper.all.reverse
 
     respond_to do |format|
       format.html # index.html.erb
@@ -83,6 +83,13 @@ class PapersController < ApplicationController
     end
   end
 
+  def serve
+    @paper = Paper.find(params[:id])
+    @paper.downloads = @paper.downloads ? @paper.downloads + 1 : 1
+    @paper.save
+
+    redirect_to @paper.pdf.url
+  end
 
   protected
 

@@ -26,5 +26,6 @@ end
 #  issue             :integer
 #  page_nums         :string(255)
 #  papertype         :string(255)
+#  downloads         :integer
 #
 

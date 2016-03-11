@@ -1,0 +1,19 @@
+%tr
+  %td{:width => "90%"}
+    = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
+    - paper.collaborators.each.each_with_index do |collab,i|
+      = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
+      = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
+    = succeed "." do
+      %span.title= paper.title
+    %span.venue= paper.venue
+    = succeed "." do
+      %span.year= paper.year
+    = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
+    = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
+    = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums and paper.page_nums != ""
+    = "[<span class=\"acc-rate\">#{paper.accept_rate}</span>% accept rate]".html_safe if paper.accept_rate and paper.accept_rate != ""
+  %td
+    = link_to 'PDF', controller: :papers, action: :serve, id: paper.id
+  %td
+    = paper.downloads

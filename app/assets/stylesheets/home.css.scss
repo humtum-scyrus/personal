@@ -1,3 +1,25 @@
 // Place all the styles related to the home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.bioimg {
+  text-align: center;
+}
+
+.bioupdates {
+  max-height:240px;
+  overflow:auto;
+}
+
+.update {
+  margin-bottom: 2px;
+}
+
+.citation_count {
+  font-weight: bold;
+}
+
+.dcv {
+  margin-top: 4px;
+  text-align: center;
+}

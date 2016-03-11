@@ -15,6 +15,7 @@
         - @plus_js.each do |js|
           = javascript_include_tag js
       = csrf_meta_tags
+
       :javascript
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-30333530-1']);
@@ -26,7 +27,8 @@
           var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
 
-        %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+      %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+
     %body{:class => find_named_routes.join(" ")}
       .container
         .row.bottom-marg
@@ -44,21 +46,13 @@
                 %span.icon-bar
                 %span.icon-bar
                 %span.icon-bar
-              .nav-collapse
+              .nav-collapse.collapse
                 %ul.nav
                   %li{:class => (controller_name.downcase == 'home' ? 'active' : 'inactive')}= link_to 'Home', root_path
-                  %li.divider-vertical
-                  %li{:class => (controller_name.downcase == 'projects' ? 'active' : 'inactive')}= link_to 'Projects', projects_path
-                  %li.divider-vertical
-                  %li{:class => (controller_name.downcase == 'essays' ? 'active' : 'inactive')}= link_to 'Essays', essays_path
                   %li.divider-vertical
                   %li{:class => (controller_name.downcase == 'papers' ? 'active' : 'inactive')}= link_to 'Papers', papers_path
                   %li.divider-vertical
                   %li{:class => (controller_name.downcase == 'collaborators' ? 'active' : 'inactive')}= link_to 'Collaborators', collaborators_path
-                  %li.divider-vertical/
-                  %li
-                  %li
-                    %a{:href => "/about"} About
                 .navsearch
                   = form_tag({:controller => 'search', :action => 'index'}, {:class => 'navbar-search pull-right'}) do
                     = text_field_tag :query, params[:query], :class => 'search-query', :id => 'search_field', :placeholder => 'Search',  :autocomplete => false
@@ -67,11 +61,11 @@
         %hr/
         .row
           .span8.ft
-            %p &copy; Sauvik Das 2009-2012
+            %p="\u00A9 Sauvik Das 2009-#{Time.now.year}"
           #social-media.span4.ft
             %a{:href => "http://facebook.com/sauvikdas"}
               %img{:height => "50px", :src => "/assets/facebook-icon.png", :width => "50px"}/
-            %a{:href => "http://twitter.com/#!/Scyrus89"}
+            %a{:href => "http://twitter.com/scyrusk"}
               %img{:height => "50px", :src => "/assets/twitter-icon.png", :width => "50px"}/
             %a{:href => "https://plus.google.com/116253484763753655451"}
               %img{:height => "50px", :src => "/assets/g+icon.png", :width => "50px"}/

@@ -1,0 +1,2 @@
+module CvDownloadCountHelper
+end

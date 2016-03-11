@@ -18,7 +18,7 @@
   %h1.bottom-marg Other Recent Projects
   .row
     - @subfeatured.each do |subfeat|
-      .span4_bordered.bordered
+      .span4_bordered.bordered.clickable_proj{id: subfeat.id}
         %div
           %h3.heading
             = link_to subfeat.title, project_path(subfeat)

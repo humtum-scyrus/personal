@@ -1,5 +1,6 @@
 Personal::Application.routes.draw do
   get "static_pages/becoming_wikipedian"
+  get "static_pages/social_security_sensitivity_slides"
 
   get "home/index"
   get "home/about"
@@ -7,9 +8,15 @@ Personal::Application.routes.draw do
   get "search/index"
   post "search/index"
 
+  post "cv_download_count/increment", as: 'cv'
+
   resources :updates
 
-  resources :papers
+  resources :papers do
+    collection do
+      get 'serve'
+    end
+  end
 
   resources :collaborators
 

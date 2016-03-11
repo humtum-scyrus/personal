@@ -41,3 +41,4 @@ gem 'annotate', '~> 2.4.1.beta'
 gem 'execjs'
 gem 'therubyracer'
 gem "twitter-bootstrap-rails"
+gem 'google-scholar'

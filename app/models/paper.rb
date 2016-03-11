@@ -8,6 +8,28 @@ class Paper < ActiveRecord::Base
   def tokenCollabList=(list)
     self.collaborator_ids = list.split(",")
   end
+
+  def self.conference_papers
+    Paper.all.select do |paper|
+      paper.papertype == "1"
+    end
+  end
+
+  def self.journal_papers
+    Paper.all.select do |paper|
+      paper.papertype == "2"
+    end
+  end
+
+  def self.workshop_papers
+    Paper.all.select do |paper|
+      paper.papertype == "3"
+    end
+  end
+
+  def safe_downloads
+    self.downloads || 0
+  end
 end
 # == Schema Information
 #
@@ -30,5 +52,6 @@ end
 #  issue             :integer
 #  page_nums         :string(255)
 #  papertype         :string(255)
+#  downloads         :integer
 #
 

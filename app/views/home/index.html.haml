@@ -1,92 +1,30 @@
 .row
   .span4.biocontainer
     .bioimg
-      = image_tag 'me-korea.jpg'
+      = image_tag 'profile.jpg'
+    .dcv
+      = link_to "Download my Curriculum Vitae", cv_path, method: :post
   .span4.bioabout
     %h3 Quick Bio
     %p
-      I am a second year Ph.D. student at the <a href="http://hcii.cmu.edu">Human-Computer Interaction Institute</a> of <a href="www.cmu.edu">Carnegie Mellon University</a>. I am advised by <a href="http://www.cs.cmu.edu/~jasonh">Jason Hong</a>. My research is centered around apply machine learning and data science to usable privacy and security. Recently, I have been working on autobiographical authentication, self-censorship on social media, and social cybersecurity. I am currently interning at Facbeook. Before, I interned at Facebook and Microsoft Research. 
+      I am a Ph.D. student at <a href="www.cmu.edu">CMU</a>'s <a href="http://hcii.cmu.edu">HCII</a>, where I am advised by <a href="http://www.cs.cmu.edu/~jasonh">Jason Hong</a> and <a href="http://www.lauradabbish.com">Laura Dabbish</a>. I create quantitative models of user behavior and use these models to create tools that facilitate the use of digital resources in secure and privacy preserving ways.
     %p
-      Perhaps you're looking for my <a href='/cv.pdf'>Curriculum Vitae</a>.
-  .span4.bioupdates
+      I am a NDSEG fellow and a Qualcomm Innovation Fellow. I have been fortunate to receive a best paper award at UbiComp'2013 and an honorable mention for the NSA's Best Scientific Cybersecurity Paper. My work has been covered by The Atlantic, The Huffington Post, The Financial Times, Slate and other media outlets.
+  .span4
     %h3 Quick Updates
-    = render @updates 
+    .bioupdates
+      = render @updates 
 .row
   .span12.biopubs
-    - conference_papers = @papers.select { |paper| paper.papertype == "1" }
-    - journal_papers = @papers.select { |paper| paper.papertype == "2" }
-    - workshop_papers = @papers.select { |paper| paper.papertype == "3" }
-    - if journal_papers.length > 0
+    %p
+      You can also check out my profile on  
+      = link_to 'Google Scholar.', "http://scholar.google.com/citations?user=laPvCf4AAAAJ&hl=en&oi=ao"
+    - if @journal_papers.size > 0
       %h3 Journal Papers
-      %table.table
-        %tbody
-          - journal_papers.each do |paper|
-            %tr
-              %td{:width => "95%"}
-                - if paper.citation and not paper.citation == ""
-                  = paper.citation
-                - else
-                  = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
-                  ,
-                  - paper.collaborators.each.each_with_index do |collab,i|
-                    = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
-                    = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
-                  = succeed "." do
-                    %span.title= paper.title
-                  %span.venue= paper.venue
-                  = succeed "." do
-                    %span.year= paper.year
-                  = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
-                  = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
-                  = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums and paper.page_nums != ""
-                  = "[<span class=\"acc-rate\">#{paper.accept_rate}</span>% accept rate]".html_safe if paper.accept_rate and paper.accept_rate != ""
-              %td= link_to 'PDF', paper.pdf.url
-    - if conference_papers.length > 0
+      = render @journal_papers 
+    - if @conference_papers.size > 0
       %h3 Conference Papers
-      %table.table
-        %tbody
-          - conference_papers.each do |paper|
-            %tr
-              %td{:width => "95%"}
-                - if paper.citation and not paper.citation == ""
-                  = paper.citation
-                - else
-                  = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
-                  - paper.collaborators.each.each_with_index do |collab,i|
-                    = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
-                    = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
-                  = succeed "." do
-                    %span.title= paper.title
-                  %span.venue= paper.venue
-                  = succeed "." do
-                    %span.year= paper.year
-                  = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
-                  = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
-                  = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums and paper.page_nums != ""
-                  = "[<span class=\"acc-rate\">#{paper.accept_rate}</span>% accept rate]".html_safe if paper.accept_rate and paper.accept_rate != ""
-              %td= link_to 'PDF', paper.pdf.url
-    - if workshop_papers.length > 0
+      = render @conference_papers 
+    - if @workshop_papers.size > 0
       %h3 Workshop Papers
-      %table.table
-        %tbody
-          - workshop_papers.each do |paper|
-            %tr
-              %td{:width => "95%"}
-                - if paper.citation and not paper.citation == ""
-                  = paper.citation
-                - else
-                  = link_to 'Das, S.', root_path, :class => 'author' if paper.collaborators.length == 0
-                  - paper.collaborators.each.each_with_index do |collab,i|
-                    = link_to (i == paper.collaborators.length - 1 ? 'Das, S.,' : 'Das,S.'), root_path, :class => 'author' if i+1 == paper.self_author_order
-                    = link_to (i == paper.collaborators.length - 1 ? collab.name_auth : "#{collab.name_auth},"), collaborator_path(collab), :class => 'author'
-                  %span.title= paper.title
-                  %span.venue= paper.venue
-                  = succeed "." do
-                    %span.year= paper.year
-                  = "<span class=\"volume\">#{paper.volume}</span>".html_safe if paper.volume
-                  = "<span class=\"issue\">(#{paper.issue})</span>.".html_safe if paper.issue
-                  = "<span class=\"page_nums\">pp #{paper.page_nums}</span>".html_safe if paper.page_nums
-                  [
-                  %span.acc-rate>= paper.accept_rate
-                  \% accept rate]
-              %td= link_to 'PDF', paper.pdf.url
+      = render @workshop_papers 
